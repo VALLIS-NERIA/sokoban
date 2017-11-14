@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GameView.Properties {
+namespace DesignView.Properties {
 
 
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
