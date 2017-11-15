@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Xml.Schema;
 
 namespace Model {
     public class GameModel : IGame {
+        [DebuggerDisplay("{X},{Y}")]
         internal struct Vector2 {
             public int X;
             public int Y;
@@ -21,7 +23,7 @@ namespace Model {
             public static readonly Vector2 Up = new Vector2(0, -1);
             public static readonly Vector2 Right = new Vector2(1, 0);
 
-            public static Vector2 operator +(Vector2 left, Vector2 right) { return new Vector2 {X = left.X + right.X, Y = left.Y - right.Y}; }
+            public static Vector2 operator +(Vector2 left, Vector2 right) { return new Vector2 {X = left.X + right.X, Y = left.Y + right.Y}; }
 
             public static Vector2 operator *(Vector2 point, int time) { return new Vector2 {X = point.X * time, Y = point.Y * time}; }
 
@@ -105,7 +107,7 @@ namespace Model {
         public void LoadLevel(string levelString) {
             // TODO: checker
             this.goals = new List<Vector2>();
-            var lines = levelString.Trim().Split(Environment.NewLine.ToCharArray());
+            var lines = levelString.Trim().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             this.width = lines[0].Length;
             this.height = lines.Length;
             this.map = new FloorType[this.width, this.height];
@@ -181,6 +183,7 @@ namespace Model {
 
             // push
             case FloorType.Block:
+            case FloorType.BlockOnGoal:
                 var upup = up + direction;
                 switch (this[upup]) {
                 case FloorType.Goal:
