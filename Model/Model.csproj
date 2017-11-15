@@ -40,9 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileChecker.cs" />
+    <Compile Include="DesigningLevel.cs" />
+    <Compile Include="Checker.cs" />
+    <Compile Include="Filer.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="IChecker.cs" />
     <Compile Include="IFileable.cs" />
+    <Compile Include="IFiler.cs" />
+    <Compile Include="IGame.cs" />
+    <Compile Include="ILevelDesigner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

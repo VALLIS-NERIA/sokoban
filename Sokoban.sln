@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameView", "PlayView\GameView.csproj", "{4B3924C0-5BEC-42F4-90D6-A062D95EC56B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesignView", "DesignView\DesignView.csproj", "{00EADFDA-EE6C-4F45-8C14-85AF8A338FB9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{0CAAE5BD-A502-497A-964B-A9A8FD6FA3B9}"
 EndProject
 Global
@@ -15,14 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4B3924C0-5BEC-42F4-90D6-A062D95EC56B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B3924C0-5BEC-42F4-90D6-A062D95EC56B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B3924C0-5BEC-42F4-90D6-A062D95EC56B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B3924C0-5BEC-42F4-90D6-A062D95EC56B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{00EADFDA-EE6C-4F45-8C14-85AF8A338FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00EADFDA-EE6C-4F45-8C14-85AF8A338FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00EADFDA-EE6C-4F45-8C14-85AF8A338FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00EADFDA-EE6C-4F45-8C14-85AF8A338FB9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0CAAE5BD-A502-497A-964B-A9A8FD6FA3B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0CAAE5BD-A502-497A-964B-A9A8FD6FA3B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CAAE5BD-A502-497A-964B-A9A8FD6FA3B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
