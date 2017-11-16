@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Controller;
+using Model;
 using View;
+
 namespace UI {
     static class Program {
         /// <summary>
@@ -12,8 +15,13 @@ namespace UI {
         [STAThread]
         static void Main() {
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GameView());
+            Application.SetCompatibleTextRenderingDefault(true);
+            var view = new GameView();
+            var game = new GameModel();
+            var controller = new GameController();
+            controller.LoadGame(game);
+            view.LoadController(controller);
+            Application.Run(view);
         }
     }
 }

@@ -46,6 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="CommandLink.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FilerView.cs" />
     <Compile Include="FloorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -58,7 +62,14 @@
     <Compile Include="GameView.Designer.cs">
       <DependentUpon>GameView.cs</DependentUpon>
     </Compile>
+    <Compile Include="IFilerView.cs" />
     <Compile Include="IGameView.cs" />
+    <Compile Include="LoadDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadDialog.Designer.cs">
+      <DependentUpon>LoadDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -73,12 +84,19 @@
     <EmbeddedResource Include="GameView.resx">
       <DependentUpon>GameView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LoadDialog.resx">
+      <DependentUpon>LoadDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Controller\Controller.csproj">
+      <Project>{7bde0e7b-b7c3-42fb-aae8-14bfe05f2d5e}</Project>
+      <Name>Controller</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{0caae5bd-a502-497a-964b-a9a8fd6fa3b9}</Project>
       <Name>Model</Name>

@@ -15,11 +15,15 @@ namespace Model {
 
     public interface IGame : IFileable {
         int MoveCount { get; }
-
+        
         bool IsWin();
 
         bool Move(Direction direction);
 
         void LoadLevel(string levelString);
+
+        bool Undo();
+
+        void Retry();
     }
 }

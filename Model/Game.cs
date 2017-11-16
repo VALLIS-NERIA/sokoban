@@ -47,18 +47,48 @@ namespace Model {
             }
         }
 
-        private List<Vector2> goals;
+        private struct Memo {
+            public Vector2 Location;
+            public FloorType OldType;
+
+            public Memo(int x, int y, FloorType type) {
+                this.Location = new Vector2(x, y);
+                this.OldType = type;
+            }
+
+            public Memo(GameModel map, int x, int y) {
+                this.Location = new Vector2(x, y);
+                this.OldType = map[x, y];
+            }
+
+            public Memo(GameModel map, Vector2 v) {
+                this.Location = v;
+                this.OldType = map[v];
+            }
+
+            public static implicit operator List<Memo>(Memo o) { return new List<Memo> {o}; }
+
+            public static List<Memo> operator +(List<Memo> l, Memo o) {
+                l.Add(o);
+                return l;
+            }
+        }
+
         private int height;
-        private FloorType[,] map;
-        private int moveCount = 0;
-        private Vector2 player = new Vector2(-1, -1);
         private int width;
+        private FloorType[,] map;
+        private List<Vector2> goals;
+        private Vector2 player = new Vector2(-1, -1);
+        private int moveCount = 0;
+        private Stack<List<Memo>> undoList;
+        private string currentGame;
+
+        public GameModel() { this.LoadLevel("######\r\n#-.--#\r\n#-$.-#\r\n#-$--#\r\n#-@--#\r\n######"); }
 
         private FloorType this[Vector2 point] {
             get => this[point.X, point.Y];
             set => this[point.X, point.Y] = value;
         }
-
 
         public FloorType this[int x, int y] {
             get {
@@ -104,13 +134,21 @@ namespace Model {
         public int Height => this.height;
         public int MoveCount => this.moveCount;
 
+        public void Retry() { this.LoadLevel(this.currentGame); }
+
         public void LoadLevel(string levelString) {
             // TODO: checker
-            this.goals = new List<Vector2>();
             var lines = levelString.Trim().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
             this.width = lines[0].Length;
             this.height = lines.Length;
             this.map = new FloorType[this.width, this.height];
+
+            this.goals = new List<Vector2>();
+            this.player = new Vector2(-1, -1);
+            this.undoList = new Stack<List<Memo>>();
+            this.currentGame = levelString;
+
             for (int i = 0; i < this.height; i++) {
                 for (int j = 0; j < this.width; j++) {
                     this.map[j, i] = (FloorType) lines[i][j];
@@ -154,19 +192,47 @@ namespace Model {
                 break;
             }
             var ret = MoveTo(vector);
-            if (ret) {
+            if (ret != null) {
                 this.moveCount += 1;
+                this.undoList.Push(ret);
+                return true;
             }
-            return ret;
+            return false;
         }
 
-        private bool MoveTo(Vector2 direction) {
+        public bool IsWin() {
+            foreach (Vector2 position in this.goals) {
+                if (this[position] != FloorType.BlockOnGoal) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool Undo() {
+            if (this.undoList.Count == 0) return false;
+            var last = this.undoList.Pop();
+            foreach (Memo memo in last) {
+                // access map directly since "this" indexer has extra operations
+                this.map[memo.Location.X, memo.Location.Y] = memo.OldType;
+                if (memo.OldType == FloorType.Player) {
+                    this.player = memo.Location;
+                }
+            }
+            this.moveCount++;
+            return true;
+        }
+
+        private List<Memo> MoveTo(Vector2 direction) {
             var up = this.player + direction;
+            var upup = up + direction;
             var dest = this[up];
 
+            List<Memo> undoMemo = new Memo(this, this.player)
+                                  + new Memo(this, up) + new Memo(this, upup);
             switch (dest) {
             case FloorType.Wall:
-                return false;
+                goto NoMove;
             case FloorType.Player:
             case FloorType.PlayerOnGoal:
                 throw new InvalidOperationException("Impossible");
@@ -179,12 +245,11 @@ namespace Model {
                 this[up] = FloorType.Player;
                 this[this.player] = FloorType.Empty;
                 this.player = up;
-                return true;
+                goto Move;
 
             // push
             case FloorType.Block:
             case FloorType.BlockOnGoal:
-                var upup = up + direction;
                 switch (this[upup]) {
                 case FloorType.Goal:
                 case FloorType.Empty:
@@ -193,22 +258,17 @@ namespace Model {
                     this[up] = FloorType.Player;
                     this[this.player] = FloorType.Empty;
                     this.player = up;
-                    return true;
+                    goto Move;
                 default:
-                    return false;
+                    goto NoMove;
                 }
             default:
-                return false;
+                goto NoMove;
             }
-        }
-
-        public bool IsWin() {
-            foreach (Vector2 position in this.goals) {
-                if (this[position] != FloorType.BlockOnGoal) {
-                    return false;
-                }
-            }
-            return true;
+            NoMove:
+            return null;
+            Move:
+            return undoMemo;
         }
     }
 }
