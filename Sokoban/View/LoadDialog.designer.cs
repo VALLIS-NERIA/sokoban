@@ -1,4 +1,4 @@
-﻿namespace View {
+﻿namespace Sokoban.View {
     partial class LoadDialog {
         /// <summary>
         /// Required designer variable.
@@ -25,8 +25,8 @@
         private void InitializeComponent() {
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
-            this.cancelCommandLink = new View.CommandLink();
-            this.openDialogCommandLink = new View.CommandLink();
+            this.cancelCommandLink = new Sokoban.View.CommandLink();
+            this.openDialogCommandLink = new Sokoban.View.CommandLink();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -85,7 +85,7 @@
 
         #endregion
 
-        private View.CommandLink openDialogCommandLink;
+        private Sokoban.View.CommandLink openDialogCommandLink;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label label1;
         private CommandLink cancelCommandLink;

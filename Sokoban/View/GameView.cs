@@ -7,23 +7,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Model;
-using Controller;
+using Sokoban.Model;
+using Sokoban.Controller;
 using System.IO;
 
-namespace View {
+namespace Sokoban.View {
     public partial class GameView : Form, IGameView {
-        private IGame game => this.controller.Game;
         private IGameController controller;
         private FloorControl[,] floors;
         public GameView() { InitializeComponent(); }
 
-        public GameView(IGameController controller) : this() { LoadController(controller); }
-
+        public GameView(IGameController controller) : this() { SetController(controller); }
+        protected override bool ProcessDialogKey(Keys keyData) => false;
         public void Congraz() { MessageBox.Show("You Win!"); }
 
-        public void LoadController(IGameController controller) {
+        public void SetController(IGameController controller) {
             this.controller = controller;
+        }
+
+        public void InitGame(IFileable game) {
             this.floors = new FloorControl[game.Width, game.Height];
             for (int x = 0; x < game.Width; x++) {
                 for (int y = 0; y < game.Height; y++) {
@@ -36,6 +38,7 @@ namespace View {
                     }
                 }
             }
+            RefreshGame();
         }
 
         public void Update(int x, int y, FloorType type) {
@@ -43,25 +46,10 @@ namespace View {
             this.floors[x, y].RefreshImage();
         }
 
-        public void RefreshGame() => RefreshGame(0, 0, this.game.Width + this.game.Height);
-
-        public void RefreshGame(int centerX, int centerY, int radix) {
-            int xbegin = centerX - radix >= 0 ? centerX - radix : 0;
-            int ybegin = centerY - radix >= 0 ? centerY - radix : 0;
-            int xend = centerX + radix >= this.game.Width ? this.game.Width : centerX + radix;
-            int yend = centerY + radix >= game.Height ? this.game.Height : centerY + radix;
-            for (int x = xbegin; x < xend; x++) {
-                for (int y = ybegin; y < yend; y++) {
-                    var floor = this.floors[x, y];
-                    floor.Type = this.game[x, y];
-                    floor.RefreshImage();
-                }
+        public void RefreshGame() {
+            foreach (FloorControl floor in this.floors) {
+                floor.RefreshImage();
             }
-            this.stepTextBox.Text = game.MoveCount.ToString();
-            if (this.game.IsWin()) {
-                Congraz();
-            }
-            this.stepTextBox.Focus();
         }
 
         private void GameView_Load(object sender, EventArgs e) { }

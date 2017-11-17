@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Model;
+using Sokoban.Model;
 
-namespace Controller {
+namespace Sokoban.Controller {
     public interface IFilerController {
-        IFiler Filer { get; }
         void SetFiler(IFiler filer);
         string LoadFile(string fileName);
         void SaveToFile(IFileable fileable, string fileName);

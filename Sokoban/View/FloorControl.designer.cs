@@ -1,4 +1,4 @@
-﻿namespace View {
+﻿namespace Sokoban.View {
     partial class FloorControl {
         /// <summary> 
         /// 必需的设计器变量。

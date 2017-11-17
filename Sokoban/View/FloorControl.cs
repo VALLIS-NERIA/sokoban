@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using View.Properties;
-using Model;
+using Sokoban.Properties;
+using Sokoban.Model;
 
-namespace View {
+namespace Sokoban.View {
     public partial class FloorControl : Control {
         public FloorControl() { InitializeComponent(); }
         public FloorType Type;

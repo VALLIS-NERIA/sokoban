@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace View {
+namespace Sokoban.View {
     public partial class LoadDialog : Form {
         public LoadDialog() {
             InitializeComponent();

@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
+using Sokoban.View;
 
-namespace Model {
+namespace Sokoban.Model {
     public class GameModel : IGame {
         [DebuggerDisplay("{X},{Y}")]
         internal struct Vector2 {
@@ -83,6 +84,8 @@ namespace Model {
         private Stack<List<Memo>> undoList;
         private string currentGame;
 
+        private IGameView view;
+
         public GameModel() { this.LoadLevel("######\r\n#-.--#\r\n#-$.-#\r\n#-$--#\r\n#-@--#\r\n######"); }
 
         private FloorType this[Vector2 point] {
@@ -130,7 +133,6 @@ namespace Model {
             }
         }
 
-        public IGameView view;
         public int Width => this.width;
         public int Height => this.height;
         public int MoveCount => this.moveCount;
@@ -173,6 +175,11 @@ namespace Model {
                     }
                 }
             }
+        }
+
+        public void SetView(IGameView view) {
+            this.view = view;
+            view.InitGame(this);
         }
 
         public bool Move(Direction direction) {
@@ -224,7 +231,17 @@ namespace Model {
             return true;
         }
 
+        private void Update(params Vector2[] posList) {
+            foreach (Vector2 pos in posList) {
+                this.view.Update(pos.X, pos.Y, this[pos]);
+            }
+            if (IsWin()) {
+                this.view.Congraz();
+            }
+        }
+
         private List<Memo> MoveTo(Vector2 direction) {
+            var oldPlayer = this.player;
             var up = this.player + direction;
             var upup = up + direction;
             var dest = this[up];
@@ -269,6 +286,8 @@ namespace Model {
             NoMove:
             return null;
             Move:
+            // Update the view
+            Update(oldPlayer, up, upup);
             return undoMemo;
         }
     }

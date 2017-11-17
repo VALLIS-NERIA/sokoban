@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Controller;
-using Model;
+using Sokoban.Controller;
+using Sokoban.Model;
 
-namespace View {
+namespace Sokoban.View {
     public interface IGameView {
         void RefreshGame();
+        void InitGame(IFileable game);
         void Congraz();
-        void LoadController(IGameController game);
+        void SetController(IGameController game);
         void Update(int x, int y, FloorType type);
     }
 }
-
