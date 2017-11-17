@@ -15,6 +15,7 @@ namespace Sokoban.View {
     public partial class GameView : Form, IGameView {
         private IGameController controller;
         private FloorControl[,] floors;
+        private int moveCount = 0;
         public GameView() { InitializeComponent(); }
 
         public GameView(IGameController controller) : this() { SetController(controller); }
@@ -26,6 +27,7 @@ namespace Sokoban.View {
         }
 
         public void InitGame(IFileable game) {
+            this.moveCount = 0;
             this.floors = new FloorControl[game.Width, game.Height];
             for (int x = 0; x < game.Width; x++) {
                 for (int y = 0; y < game.Height; y++) {
@@ -44,6 +46,8 @@ namespace Sokoban.View {
         public void Update(int x, int y, FloorType type) {
             this.floors[x, y].Type = type;
             this.floors[x, y].RefreshImage();
+            this.moveCount++;
+            this.stepTextBox.Text = this.moveCount.ToString();
         }
 
         public void RefreshGame() {
@@ -90,6 +94,6 @@ namespace Sokoban.View {
             RefreshGame();
         }
 
-        private void loadButton_Click(object sender, EventArgs e) { new LoadDialog().ShowDialog(); }
+        private void loadButton_Click(object sender, EventArgs e) { this.controller.Load(); }
     }
 }

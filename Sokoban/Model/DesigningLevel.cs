@@ -54,7 +54,7 @@ namespace Sokoban.Model {
             }
         }
 
-        public void SaveMe(string fileName) { this.filer.Save(fileName, this); }
+        public void SaveMe(string fileName) { this.filer.SaveFile(fileName, this); }
         public bool CheckValid() { return this.checker.CheckLevel(this); }
     }
 }

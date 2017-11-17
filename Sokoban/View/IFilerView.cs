@@ -1,11 +1,11 @@
 ﻿using Sokoban.Controller;
 using Sokoban.Model;
 
-namespace Sokoban.View{
+namespace Sokoban.View {
     public interface IFilerView {
-        IFilerController Controller { get; }
-
-        string Load();
-        void Save(IGame game);
+        string LoadedFile { get; }
+        void SetController(IFilerController controller);
+        System.Windows.Forms.DialogResult LoadDialog();
+        System.Windows.Forms.DialogResult SaveDialog(IFileable fileable);
     }
 }

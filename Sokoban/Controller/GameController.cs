@@ -11,9 +11,9 @@ namespace Sokoban.Controller {
 
         public bool Move(Direction direction) { return this.game.Move(direction); }
         public void Restart() { this.game.Retry(); }
-        public void Load(string levelString) { this.game.LoadLevel(levelString); }
+        public void Load() { this.game.Load(); }
         public void SetGame(IGame game) { this.game = game; }
-        public string Save() { throw new NotImplementedException(); }
+        public void Save() { throw new NotImplementedException(); }
         public bool Undo() { return this.game.Undo(); }
     }
 }

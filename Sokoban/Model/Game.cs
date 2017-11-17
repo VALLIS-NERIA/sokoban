@@ -83,7 +83,7 @@ namespace Sokoban.Model {
         private int moveCount = 0;
         private Stack<List<Memo>> undoList;
         private string currentGame;
-
+        private IFiler filer;
         private IGameView view;
 
         public GameModel() { this.LoadLevel("######\r\n#-.--#\r\n#-$.-#\r\n#-$--#\r\n#-@--#\r\n######"); }
@@ -139,6 +139,8 @@ namespace Sokoban.Model {
 
         public void Retry() { this.LoadLevel(this.currentGame); }
 
+        public void Load() {  }
+
         public void LoadLevel(string levelString) {
             // TODO: checker
             var lines = levelString.Trim().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -151,6 +153,7 @@ namespace Sokoban.Model {
             this.player = new Vector2(-1, -1);
             this.undoList = new Stack<List<Memo>>();
             this.currentGame = levelString;
+            this.moveCount = 0;
 
             for (int i = 0; i < this.height; i++) {
                 for (int j = 0; j < this.width; j++) {
@@ -181,6 +184,8 @@ namespace Sokoban.Model {
             this.view = view;
             view.InitGame(this);
         }
+
+        public void SetFiler(IFiler filer) { this.filer = filer; }
 
         public bool Move(Direction direction) {
             Vector2 vector;
@@ -220,13 +225,16 @@ namespace Sokoban.Model {
         public bool Undo() {
             if (this.undoList.Count == 0) return false;
             var last = this.undoList.Pop();
+            var updates=new List<Vector2>();
             foreach (Memo memo in last) {
                 // access map directly since "this" indexer has extra operations
                 this.map[memo.Location.X, memo.Location.Y] = memo.OldType;
                 if (memo.OldType == FloorType.Player) {
                     this.player = memo.Location;
                 }
+                updates.Add(memo.Location);
             }
+            Update(updates.ToArray());
             this.moveCount++;
             return true;
         }

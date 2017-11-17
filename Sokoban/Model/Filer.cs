@@ -4,10 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sokoban.View;
 
 namespace Sokoban.Model {
     public class Filer : IFiler {
-        public string Serialization(IFileable fileable) {
+        private IFilerView view;
+        private string loadedFile;
+        public string LoadedFile => this.loadedFile;
+
+        public string Serialize(IFileable fileable) {
             var sb = new StringBuilder();
             var width = fileable.Width;
             var height = fileable.Height;
@@ -20,13 +25,19 @@ namespace Sokoban.Model {
             return sb.ToString();
         }
 
-        public void Save(string fileName, IFileable fileable) {
-            var str = Serialization(fileable);
+        public void SetView(IFilerView view) { this.view = view; }
+
+        public void SaveFile(string fileName, IFileable fileable) {
+            var str = Serialize(fileable);
             using (var sw = new StreamWriter(fileName)) {
                 sw.Write(str);
             }
         }
 
-        public string Load(string fileName) => File.ReadAllText(fileName);
+        public void SaveDialog(IFileable fileable) { this.view.SaveDialog(fileable); }
+        public void LoadDialog() { this.view.LoadDialog(); }
+
+        public void LoadFile(string fileName) { this.loadedFile = File.ReadAllText(fileName); }
+
     }
 }

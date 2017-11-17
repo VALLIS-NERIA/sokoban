@@ -9,9 +9,9 @@ namespace Sokoban.Controller {
     public interface IGameController {
         bool Move(Direction direction);
         void Restart();
-        void Load(string levelString);
+        void Load();
         void SetGame(IGame game);
-        string Save();
+        void Save();
         bool Undo();
     }
 }

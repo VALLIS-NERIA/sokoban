@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\FilerController.cs" />
     <Compile Include="Model\Checker.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -53,7 +54,12 @@
     </Compile>
     <Compile Include="Model\DesigningLevel.cs" />
     <Compile Include="Model\Filer.cs" />
-    <Compile Include="View\FilerView.cs" />
+    <Compile Include="View\FilerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\FilerView.Designer.cs">
+      <DependentUpon>FilerView.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\FloorControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -77,12 +83,6 @@
     <Compile Include="Controller\IGameController.cs" />
     <Compile Include="View\IGameView.cs" />
     <Compile Include="Model\ILevelDesigner.cs" />
-    <Compile Include="View\LoadDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\LoadDialog.designer.cs">
-      <DependentUpon>LoadDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -91,14 +91,14 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Resources\Resources.resx" />
+    <EmbeddedResource Include="View\FilerView.resx">
+      <DependentUpon>FilerView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\FloorControl.resx">
       <DependentUpon>FloorControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\GameView.resx">
       <DependentUpon>GameView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\LoadDialog.resx">
-      <DependentUpon>LoadDialog.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

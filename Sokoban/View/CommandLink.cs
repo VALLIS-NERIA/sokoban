@@ -35,11 +35,11 @@ namespace Sokoban.View {
          Description("Gets or sets the shield icon visibility of the command link."),
          DefaultValue(false)]
         public bool Shield {
-            get => _shield;
+            get => this._shield;
             set {
-                _shield = value;
+                this._shield = value;
                 SendMessage(new HandleRef(this, this.Handle), BCM_SETSHIELD, IntPtr.Zero,
-                            _shield);
+                            this._shield);
             }
         }
 
