@@ -13,7 +13,7 @@ namespace Sokoban.Controller {
         public void Restart() { this.game.Retry(); }
         public void Load() { this.game.Load(); }
         public void SetGame(IGame game) { this.game = game; }
-        public void Save() { throw new NotImplementedException(); }
+        public void Save() { this.game.Save(); }
         public bool Undo() { return this.game.Undo(); }
     }
 }

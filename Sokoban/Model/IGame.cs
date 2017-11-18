@@ -21,6 +21,7 @@ namespace Sokoban.Model {
         bool IsWin();
         bool Move(Direction direction);
         void Load();
+        void Save();
         void LoadLevel(string levelString);
         void SetView(IGameView view);
         void SetFiler(IFiler filer);

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Sokoban.View;
 
 namespace Sokoban.Model {
@@ -18,7 +19,7 @@ namespace Sokoban.Model {
             var height = fileable.Height;
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    sb.Append(fileable[x, y]);
+                    sb.Append((char)fileable[x, y]);
                 }
                 sb.Append(Environment.NewLine);
             }
@@ -34,8 +35,16 @@ namespace Sokoban.Model {
             }
         }
 
-        public void SaveDialog(IFileable fileable) { this.view.SaveDialog(fileable); }
-        public void LoadDialog() { this.view.LoadDialog(); }
+        public bool SaveDialog(IFileable fileable) {
+            var ret= this.view.SaveDialog(fileable);
+            return ret == DialogResult.OK;
+        }
+
+        public bool LoadDialog() {
+            this.loadedFile = null;
+            var ret = this.view.LoadDialog();
+            return ret == DialogResult.OK;
+        }
 
         public void LoadFile(string fileName) { this.loadedFile = File.ReadAllText(fileName); }
 

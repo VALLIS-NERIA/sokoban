@@ -16,13 +16,20 @@ namespace UI {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(true);
-            var view = new GameView();
-            var game = new GameModel();
-            var controller = new GameController();
-            controller.SetGame(game);
-            view.SetController(controller);
-            game.SetView(view);
-            Application.Run(view);
+            var gameView = new GameView();
+            var gameModel = new GameModel();
+            var gameController = new GameController();
+            var filerView = new FilerView();
+            var filerModel = new Filer();
+            var filerController = new FilerController();
+            gameController.SetGame(gameModel);
+            gameView.SetController(gameController);
+            gameModel.SetView(gameView);
+            filerView.SetController(filerController);
+            filerController.SetFiler(filerModel);
+            filerModel.SetView(filerView);
+            gameModel.SetFiler(filerModel);
+            Application.Run(gameView);
         }
     }
 }

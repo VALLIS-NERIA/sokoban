@@ -51,6 +51,8 @@ namespace Sokoban.View {
             set => SetNoteText(value);
         }
 
+        private string note;
+
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         static extern int SendMessage(HandleRef hWnd, UInt32 Msg, ref int wParam, StringBuilder lParam);
 
@@ -67,6 +69,12 @@ namespace Sokoban.View {
             SendMessage(new HandleRef(this, this.Handle),
                         BCM_SETNOTE,
                         IntPtr.Zero, value);
+            this.note = value;
+        }
+
+        public override void Refresh() {
+            SetNoteText(note);
+            base.Refresh();
         }
 
         private string GetNoteText() {
@@ -79,7 +87,7 @@ namespace Sokoban.View {
             SendMessage(new HandleRef(this, this.Handle),
                         BCM_GETNOTE,
                         ref length, sb);
-
+            this.note = sb.ToString();
             return sb.ToString();
         }
     }

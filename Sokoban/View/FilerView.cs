@@ -29,10 +29,10 @@ namespace Sokoban.View {
         private string recentFile {
             get => this._recentFile;
             set {
-                this.recentCommandLink.Enabled = true;
-                this.recentCommandLink.Note = this.recentFile;
-                this.recentCommandLink.Text = Path.GetFileName(this.recentFile);
                 this._recentFile = value;
+                this.recentCommandLink.Enabled = true;
+                this.recentCommandLink.Note = this._recentFile;
+                this.recentCommandLink.Text = Path.GetFileName(this._recentFile);
             }
         }
 
@@ -46,12 +46,14 @@ namespace Sokoban.View {
 
         public DialogResult LoadDialog() {
             this.Text = "Open";
+            this.dialogCommandLink.Text = "Open ...";
             this.mode = OperationMode.Load;
             return ShowDialog();
         }
 
         public DialogResult SaveDialog(IFileable fileable) {
             this.Text = "Save";
+            this.dialogCommandLink.Text = "Save to ...";
             this.mode = OperationMode.Save;
             this.gameToSave = fileable;
             return ShowDialog();
@@ -70,10 +72,10 @@ namespace Sokoban.View {
                 }
             }
             else if (this.mode == OperationMode.Save) {
-                this.openFileDialog1.Title = "Save as ...";
-                var result = this.openFileDialog1.ShowDialog();
+                this.saveFileDialog1.Title = "Save as ...";
+                var result = this.saveFileDialog1.ShowDialog();
                 if (result == DialogResult.OK) {
-                    var fn = this.openFileDialog1.FileName;
+                    var fn = this.saveFileDialog1.FileName;
                     this.controller.SaveToFile(this.gameToSave, fn);
                     this.recentFile = fn;
                     this.DialogResult = DialogResult.OK;
@@ -85,6 +87,12 @@ namespace Sokoban.View {
         private void cancelCommandLink_Click(object sender, EventArgs e) {
             this.DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void FilerView_Load(object sender, EventArgs e) {
+            this.cancelCommandLink.Refresh();
+            this.dialogCommandLink.Refresh();
+            this.recentCommandLink.Refresh();
         }
     }
 }

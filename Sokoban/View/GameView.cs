@@ -15,19 +15,27 @@ namespace Sokoban.View {
     public partial class GameView : Form, IGameView {
         private IGameController controller;
         private FloorControl[,] floors;
-        private int moveCount = 0;
+        private int _moveCount = 0;
+
+        private int moveCount {
+            get => this._moveCount;
+            set {
+                this._moveCount = value;
+                this.stepTextBox.Text = this.moveCount.ToString();
+            }
+        }
+
         public GameView() { InitializeComponent(); }
 
         public GameView(IGameController controller) : this() { SetController(controller); }
         protected override bool ProcessDialogKey(Keys keyData) => false;
         public void Congraz() { MessageBox.Show("You Win!"); }
 
-        public void SetController(IGameController controller) {
-            this.controller = controller;
-        }
+        public void SetController(IGameController controller) { this.controller = controller; }
 
         public void InitGame(IFileable game) {
             this.moveCount = 0;
+            this.panel1.Controls.Clear();
             this.floors = new FloorControl[game.Width, game.Height];
             for (int x = 0; x < game.Width; x++) {
                 for (int y = 0; y < game.Height; y++) {
@@ -46,22 +54,19 @@ namespace Sokoban.View {
         public void Update(int x, int y, FloorType type) {
             this.floors[x, y].Type = type;
             this.floors[x, y].RefreshImage();
-            this.moveCount++;
-            this.stepTextBox.Text = this.moveCount.ToString();
         }
 
         public void RefreshGame() {
             foreach (FloorControl floor in this.floors) {
+                this.stepTextBox.Text = this.moveCount.ToString();
                 floor.RefreshImage();
             }
         }
 
-        private void GameView_Load(object sender, EventArgs e) { }
-
-        private void GameView_KeyDown(object sender, KeyEventArgs e) {
+        private void Move(KeyEventArgs e) {
             bool moved = false;
             if (e.Control == true && e.KeyCode == Keys.Z) {
-                this.controller.Undo();
+                this.undoButton_Click(null, null);
                 RefreshGame();
             }
             switch (e.KeyCode) {
@@ -80,20 +85,33 @@ namespace Sokoban.View {
             }
 
             if (moved) {
+                this.moveCount++;
                 RefreshGame();
             }
         }
 
-        private void retryButton_Click(object sender, EventArgs e) {
+        private void Retry() {
             this.controller.Restart();
             RefreshGame();
         }
 
-        private void undoButton_Click(object sender, EventArgs e) {
-            this.controller.Undo();
-            RefreshGame();
+        private void Undo() {
+            var ret = this.controller.Undo();
+            if (ret) {
+                RefreshGame();
+                this.moveCount++;
+            }
         }
 
+
+        private void GameView_KeyDown(object sender, KeyEventArgs e) { Move(e); }
+
+        private void retryButton_Click(object sender, EventArgs e) { Retry(); }
+
+        private void undoButton_Click(object sender, EventArgs e) { Undo(); }
+
         private void loadButton_Click(object sender, EventArgs e) { this.controller.Load(); }
+
+        private void saveButton_Click(object sender, EventArgs e) { this.controller.Save(); }
     }
 }

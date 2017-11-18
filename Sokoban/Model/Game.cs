@@ -139,7 +139,14 @@ namespace Sokoban.Model {
 
         public void Retry() { this.LoadLevel(this.currentGame); }
 
-        public void Load() {  }
+        public void Load() {
+            this.filer.LoadDialog();
+            if (this.filer.LoadedFile != null) {
+                LoadLevel(this.filer.LoadedFile);
+            }
+        }
+
+        public void Save() { this.filer.SaveDialog(this); }
 
         public void LoadLevel(string levelString) {
             // TODO: checker
@@ -178,6 +185,7 @@ namespace Sokoban.Model {
                     }
                 }
             }
+            this.view?.InitGame(this);
         }
 
         public void SetView(IGameView view) {
@@ -214,6 +222,7 @@ namespace Sokoban.Model {
         }
 
         public bool IsWin() {
+            if (this.goals.Count == 0) return false;
             foreach (Vector2 position in this.goals) {
                 if (this[position] != FloorType.BlockOnGoal) {
                     return false;
@@ -225,7 +234,7 @@ namespace Sokoban.Model {
         public bool Undo() {
             if (this.undoList.Count == 0) return false;
             var last = this.undoList.Pop();
-            var updates=new List<Vector2>();
+            var updates = new List<Vector2>();
             foreach (Memo memo in last) {
                 // access map directly since "this" indexer has extra operations
                 this.map[memo.Location.X, memo.Location.Y] = memo.OldType;

@@ -15,10 +15,10 @@ namespace Sokoban.Model {
         // for FilerController to call
         void SaveFile(string fileName, IFileable fileable);
         // for other models to call
-        void SaveDialog(IFileable fileable);
+        bool SaveDialog(IFileable fileable);
         // for FilerController to call
         void LoadFile(string fileName);
         // for other models to call
-        void LoadDialog();
+        bool LoadDialog();
     }
 }
