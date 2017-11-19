@@ -34,21 +34,42 @@ namespace Sokoban.View.WPF {
             this.panel1.Children.Clear();
             this.panel1.Width = game.Width * new FloorControl().Width;
             this.floors = new FloorControl[game.Height, game.Width];
+
+            FloorControl initPlayer = null;
             for (int x = 0; x < game.Height; x++) {
                 for (int y = 0; y < game.Width; y++) {
                     var floor = new FloorControl();
                     this.floors[x, y] = floor;
                     floor.Type = game[x, y];
+                    if (floor.Type == FloorType.Player || floor.Type == FloorType.PlayerOnGoal) {
+                        initPlayer = floor;
+                    }
                     this.panel1.Children.Add(floor);
                 }
             }
+            var left = this.controller.CanMove(Direction.Left);
+            var right = this.controller.CanMove(Direction.Right);
+            var up = this.controller.CanMove(Direction.Up);
+            var down = this.controller.CanMove(Direction.Down);
+            initPlayer?.SetDirection(up, down, left, right);
+
         }
 
         public void Congraz() { MessageBox.Show("You Win!"); }
 
         public void SetController(IGameController controller) { this.controller = controller; }
 
-        public void Update(int x, int y, FloorType type) { this.floors[x, y].Type = type; }
+        public void Update(int x, int y, FloorType type) {
+            this.floors[x, y].Type = type;
+            this.floors[x,y].ClearDirection();
+            if (type == FloorType.Player || type == FloorType.PlayerOnGoal) {
+                var left = this.controller.CanMove(Direction.Left);
+                var right = this.controller.CanMove(Direction.Right);
+                var up = this.controller.CanMove(Direction.Up);
+                var down = this.controller.CanMove(Direction.Down);
+                this.floors[x, y].SetDirection(up, down, left, right);
+            }
+        }
 
         private void Move(KeyEventArgs e) {
             bool moved = false;

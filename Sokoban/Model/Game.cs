@@ -353,9 +353,6 @@ namespace Sokoban.Model {
             case FloorType.Empty:
                 // sample: go left
                 // -@  =>  @-
-                this[up] = FloorType.Player;
-                this[this.player] = FloorType.Empty;
-                this.player = up;
                 goto Move;
 
             // push
@@ -365,10 +362,6 @@ namespace Sokoban.Model {
                 case FloorType.Goal:
                 case FloorType.Empty:
                     // -$@  =>  $@-
-                    this[upup] = FloorType.Block;
-                    this[up] = FloorType.Player;
-                    this[this.player] = FloorType.Empty;
-                    this.player = up;
                     goto Move;
                 default:
                     goto NoMove;

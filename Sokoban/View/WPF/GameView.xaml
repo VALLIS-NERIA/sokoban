@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Sokoban.View.WPF"
         mc:Ignorable="d"
         Title="WPFGame" Height="350" Width="406.331" ResizeMode="NoResize" SizeToContent="WidthAndHeight" PreviewKeyDown="Window_PreviewKeyDown">
-    <Grid ShowGridLines="True">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -23,7 +23,7 @@
                     Height="23" Click="saveButton_Click" />
 
         </Grid>
-        <WrapPanel x:Name="panel1" HorizontalAlignment="Center" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="100" ItemHeight="35" ItemWidth="35"/>
+        <WrapPanel x:Name="panel1" HorizontalAlignment="Center" Margin="5" Grid.Row="1" VerticalAlignment="Center" Width="100" ItemHeight="35" ItemWidth="35"/>
 
     </Grid>
 
