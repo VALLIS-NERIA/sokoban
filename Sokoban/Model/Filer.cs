@@ -17,9 +17,9 @@ namespace Sokoban.Model {
             var sb = new StringBuilder();
             var width = fileable.Width;
             var height = fileable.Height;
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    sb.Append((char)fileable[x, y]);
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    sb.Append((char) fileable[x, y]);
                 }
                 sb.Append(Environment.NewLine);
             }
@@ -36,7 +36,7 @@ namespace Sokoban.Model {
         }
 
         public bool SaveDialog(IFileable fileable) {
-            var ret= this.view.SaveDialog(fileable);
+            var ret = this.view.SaveDialog(fileable);
             return ret == DialogResult.OK;
         }
 
@@ -47,6 +47,5 @@ namespace Sokoban.Model {
         }
 
         public void LoadFile(string fileName) { this.loadedFile = File.ReadAllText(fileName); }
-
     }
 }

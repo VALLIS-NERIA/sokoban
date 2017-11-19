@@ -8,7 +8,9 @@ using Sokoban.Model;
 namespace Sokoban.Controller {
     public interface IFilerController {
         void SetFiler(IFiler filer);
+
         string LoadFile(string fileName);
+
         void SaveToFile(IFileable fileable, string fileName);
     }
 }

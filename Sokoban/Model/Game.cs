@@ -21,8 +21,8 @@ namespace Sokoban.Model {
                 this.Y = y;
             }
 
-            public static readonly Vector2 Up = new Vector2(0, -1);
-            public static readonly Vector2 Right = new Vector2(1, 0);
+            public static readonly Vector2 Up = new Vector2(-1, 0);
+            public static readonly Vector2 Right = new Vector2(0, 1);
 
             public static Vector2 operator +(Vector2 left, Vector2 right) { return new Vector2 {X = left.X + right.X, Y = left.Y + right.Y}; }
 
@@ -95,7 +95,7 @@ namespace Sokoban.Model {
 
         public FloorType this[int x, int y] {
             get {
-                if (x == this.width || y == this.height || x == -1 || y == -1) {
+                if (x >= this.height || y >= this.width || x <= -1 || y <= -1) {
                     return FloorType.Wall;
                 }
                 return this.map[x, y];
@@ -136,25 +136,27 @@ namespace Sokoban.Model {
         public int Width => this.width;
         public int Height => this.height;
         public int MoveCount => this.moveCount;
+        public int PlayerX => this.player.X;
+        public int PlayerY => this.player.Y;
 
         public void Retry() { this.LoadLevel(this.currentGame); }
 
-        public void Load() {
+        public void LoadDialog() {
             this.filer.LoadDialog();
             if (this.filer.LoadedFile != null) {
                 LoadLevel(this.filer.LoadedFile);
             }
         }
 
-        public void Save() { this.filer.SaveDialog(this); }
+        public void SaveDialog() { this.filer.SaveDialog(this); }
 
         public void LoadLevel(string levelString) {
             // TODO: checker
             var lines = levelString.Trim().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
-            this.width = lines[0].Length;
+            this.width = (from line in lines select line.Length).Max();
             this.height = lines.Length;
-            this.map = new FloorType[this.width, this.height];
+            this.map = new FloorType[this.height, this.width];
 
             this.goals = new List<Vector2>();
             this.player = new Vector2(-1, -1);
@@ -162,26 +164,31 @@ namespace Sokoban.Model {
             this.currentGame = levelString;
             this.moveCount = 0;
 
-            for (int i = 0; i < this.height; i++) {
-                for (int j = 0; j < this.width; j++) {
-                    this.map[j, i] = (FloorType) lines[i][j];
-                    // detect player
-                    switch (this.map[j, i]) {
-                    case FloorType.Player:
-                        if (this.player != new Vector2(-1, -1)) {
-                            throw new InvalidOperationException("too many players");
+            for (int x = 0; x < this.height; x++) {
+                for (int y = 0; y < this.width; y++) {
+                    try {
+                        this.map[x,y] = (FloorType) lines[x][y];
+                        // detect player
+                        switch (this.map[x,y]) {
+                        case FloorType.Player:
+                            if (this.player != new Vector2(-1, -1)) {
+                                throw new InvalidOperationException("too many players");
+                            }
+                            else {
+                                this.player = new Vector2(x,y);
+                            }
+                            break;
+                        case FloorType.PlayerOnGoal:
+                            this.goals.Add(new Vector2(x,y));
+                            goto case FloorType.Player;
+                        case FloorType.Goal:
+                        case FloorType.BlockOnGoal:
+                            this.goals.Add(new Vector2(x,y));
+                            break;
                         }
-                        else {
-                            this.player = new Vector2(j, i);
-                        }
-                        break;
-                    case FloorType.PlayerOnGoal:
-                        this.goals.Add(new Vector2(j, i));
-                        goto case FloorType.Player;
-                    case FloorType.Goal:
-                    case FloorType.BlockOnGoal:
-                        this.goals.Add(new Vector2(j, i));
-                        break;
+                    }
+                    catch (IndexOutOfRangeException) {
+                        this.map[x,y] = FloorType.Empty;
                     }
                 }
             }
@@ -219,6 +226,26 @@ namespace Sokoban.Model {
                 return true;
             }
             return false;
+        }
+
+        public bool CanMove(Direction direction) {
+            Vector2 vector;
+            switch (direction) {
+            case Direction.Up:
+                vector = Vector2.Up;
+                break;
+            case Direction.Down:
+                vector = -Vector2.Up;
+                break;
+            case Direction.Right:
+                vector = Vector2.Right;
+                break;
+            default:
+            case Direction.Left:
+                vector = -Vector2.Right;
+                break;
+            }
+            return CanMoveTo(vector);
         }
 
         public bool IsWin() {
@@ -306,6 +333,53 @@ namespace Sokoban.Model {
             // Update the view
             Update(oldPlayer, up, upup);
             return undoMemo;
+        }
+
+        private bool CanMoveTo(Vector2 direction) {
+            var oldPlayer = this.player;
+            var up = this.player + direction;
+            var upup = up + direction;
+            var dest = this[up];
+
+            switch (dest) {
+            case FloorType.Wall:
+                goto NoMove;
+            case FloorType.Player:
+            case FloorType.PlayerOnGoal:
+                throw new InvalidOperationException("Impossible");
+
+            // go
+            case FloorType.Goal:
+            case FloorType.Empty:
+                // sample: go left
+                // -@  =>  @-
+                this[up] = FloorType.Player;
+                this[this.player] = FloorType.Empty;
+                this.player = up;
+                goto Move;
+
+            // push
+            case FloorType.Block:
+            case FloorType.BlockOnGoal:
+                switch (this[upup]) {
+                case FloorType.Goal:
+                case FloorType.Empty:
+                    // -$@  =>  $@-
+                    this[upup] = FloorType.Block;
+                    this[up] = FloorType.Player;
+                    this[this.player] = FloorType.Empty;
+                    this.player = up;
+                    goto Move;
+                default:
+                    goto NoMove;
+                }
+            default:
+                goto NoMove;
+            }
+            NoMove:
+            return false;
+            Move:
+            return true;
         }
     }
 }

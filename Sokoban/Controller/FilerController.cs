@@ -8,6 +8,7 @@ using Sokoban.Model;
 namespace Sokoban.Controller {
     public class FilerController : IFilerController {
         private IFiler filer;
+
         public void SetFiler(IFiler filer) { this.filer = filer; }
 
         public string LoadFile(string fileName) {

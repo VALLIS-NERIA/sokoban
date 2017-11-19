@@ -1,0 +1,32 @@
+﻿<Window x:Class="WpfGameView.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfGameView"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="406.331" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid x:Name="ControlGrid" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Center" Grid.Row="0">
+            <TextBox x:Name="stepTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap"
+                     VerticalAlignment="Top" Width="60" />
+            <Button Content="Undo" HorizontalAlignment="Left" Margin="65,0,0,0" VerticalAlignment="Top" Width="60"
+                    Height="23" />
+            <Button Content="Retry" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Top" Width="60"
+                    Height="23" />
+            <Button Content="Load" HorizontalAlignment="Left" Margin="195,0,0,0" VerticalAlignment="Top" Width="60"
+                    Height="23" />
+            <Button Content="Save" HorizontalAlignment="Left" Margin="260,0,0,0" VerticalAlignment="Top" Width="60"
+                    Height="23" />
+
+        </Grid>
+        <WrapPanel x:Name="panel1" HorizontalAlignment="Center" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="100"/>
+        <local:FloorControl HorizontalAlignment="Left" Margin="332,20,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+
+    </Grid>
+
+</Window>

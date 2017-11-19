@@ -16,12 +16,14 @@ namespace Sokoban.Model {
 
     public interface IGame : IFileable {
         int MoveCount { get; }
+        int PlayerX { get; }
+        int PlayerY { get; }
 
-        
         bool IsWin();
         bool Move(Direction direction);
-        void Load();
-        void Save();
+        bool CanMove(Direction direction);
+        void LoadDialog();
+        void SaveDialog();
         void LoadLevel(string levelString);
         void SetView(IGameView view);
         void SetFiler(IFiler filer);

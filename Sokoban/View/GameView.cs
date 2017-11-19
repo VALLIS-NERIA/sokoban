@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Sokoban.Model;
 using Sokoban.Controller;
 using System.IO;
+using Sokoban.Properties;
 
 namespace Sokoban.View {
     public partial class GameView : Form, IGameView {
@@ -28,7 +29,9 @@ namespace Sokoban.View {
         public GameView() { InitializeComponent(); }
 
         public GameView(IGameController controller) : this() { SetController(controller); }
+
         protected override bool ProcessDialogKey(Keys keyData) => false;
+
         public void Congraz() { MessageBox.Show("You Win!"); }
 
         public void SetController(IGameController controller) { this.controller = controller; }
@@ -36,17 +39,27 @@ namespace Sokoban.View {
         public void InitGame(IFileable game) {
             this.moveCount = 0;
             this.panel1.Controls.Clear();
-            this.floors = new FloorControl[game.Width, game.Height];
-            for (int x = 0; x < game.Width; x++) {
-                for (int y = 0; y < game.Height; y++) {
+            this.floors = new FloorControl[game.Height, game.Width];
+            for (int x = 0; x < game.Height; x++) {
+                for (int y = 0; y < game.Width; y++) {
                     var floor = new FloorControl();
                     this.floors[x, y] = floor;
                     floor.Type = game[x, y];
                     this.panel1.Controls.Add(floor);
-                    if (y == game.Height - 1) {
-                        this.panel1.SetFlowBreak(floor, true);
-                    }
                 }
+                this.panel1.SetFlowBreak(this.floors[x, game.Width - 1], true);
+            }
+            if (this.Width > this.panel1.Width) {
+                this.panel1.Left = (this.Width - this.panel1.Width) / 4;
+            }
+            else {
+                this.panel1.Left = 1;
+            }
+            if (this.Width > this.panel2.Width) {
+                this.panel2.Left = (this.Width - this.panel2.Width) / 4;
+            }
+            else {
+                this.panel2.Left = 1;
             }
             RefreshGame();
         }
@@ -54,6 +67,9 @@ namespace Sokoban.View {
         public void Update(int x, int y, FloorType type) {
             this.floors[x, y].Type = type;
             this.floors[x, y].RefreshImage();
+            if (type == FloorType.Player || type== FloorType.PlayerOnGoal) {
+                // TODO
+            }
         }
 
         public void RefreshGame() {
@@ -63,7 +79,8 @@ namespace Sokoban.View {
             }
         }
 
-        private void Move(KeyEventArgs e) {
+
+        private new void Move(KeyEventArgs e) {
             bool moved = false;
             if (e.Control == true && e.KeyCode == Keys.Z) {
                 this.undoButton_Click(null, null);
@@ -86,19 +103,19 @@ namespace Sokoban.View {
 
             if (moved) {
                 this.moveCount++;
-                RefreshGame();
+                //RefreshGame();
             }
         }
 
         private void Retry() {
             this.controller.Restart();
-            RefreshGame();
+            //RefreshGame();
         }
 
         private void Undo() {
             var ret = this.controller.Undo();
             if (ret) {
-                RefreshGame();
+                //RefreshGame();
                 this.moveCount++;
             }
         }
@@ -113,5 +130,7 @@ namespace Sokoban.View {
         private void loadButton_Click(object sender, EventArgs e) { this.controller.Load(); }
 
         private void saveButton_Click(object sender, EventArgs e) { this.controller.Save(); }
+
+        private void GameView_Resize(object sender, EventArgs e) {  }
     }
 }

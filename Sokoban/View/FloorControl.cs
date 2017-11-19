@@ -14,10 +14,9 @@ namespace Sokoban.View {
     public partial class FloorControl : Control {
         public FloorControl() { InitializeComponent(); }
         public FloorType Type;
-
         public void RefreshImage() {
             string resourceName = "";
-            switch (Type) {
+            switch (this.Type) {
             case FloorType.Goal:
                 resourceName = "goal";
                 break;
