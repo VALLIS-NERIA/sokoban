@@ -43,7 +43,10 @@ namespace Sokoban.Model {
         public bool LoadDialog() {
             this.loadedFile = null;
             var ret = this.view.LoadDialog();
-            return ret == DialogResult.OK;
+            if (ret == DialogResult.OK) {
+                return true;
+            }
+            return false;
         }
 
         public void LoadFile(string fileName) { this.loadedFile = File.ReadAllText(fileName); }

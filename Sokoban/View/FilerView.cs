@@ -94,5 +94,18 @@ namespace Sokoban.View {
             this.dialogCommandLink.Refresh();
             this.recentCommandLink.Refresh();
         }
+
+        private void recentCommandLink_Click(object sender, EventArgs e) {
+            if (this.mode == OperationMode.Load) {
+                this.loadedFile = this.controller.LoadFile(this.recentFile);
+                this.DialogResult = DialogResult.OK;
+                Close();
+            }
+            else if (this.mode == OperationMode.Save) {
+                this.controller.SaveToFile(this.gameToSave, this.recentFile);
+                this.DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
     }
 }

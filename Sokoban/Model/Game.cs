@@ -21,8 +21,8 @@ namespace Sokoban.Model {
                 this.Y = y;
             }
 
-            public static readonly Vector2 Up = new Vector2(-1, 0);
-            public static readonly Vector2 Right = new Vector2(0, 1);
+            public static readonly Vector2 Up = new Vector2(0, -1);
+            public static readonly Vector2 Right = new Vector2(1, 0);
 
             public static Vector2 operator +(Vector2 left, Vector2 right) { return new Vector2 {X = left.X + right.X, Y = left.Y + right.Y}; }
 
@@ -86,7 +86,10 @@ namespace Sokoban.Model {
         private IFiler filer;
         private IGameView view;
 
-        public GameModel() { this.LoadLevel("######\r\n#-.--#\r\n#-$.-#\r\n#-$--#\r\n#-@--#\r\n######"); }
+        public GameModel() {
+            //this.LoadLevel("#####\n#---#\n#-@-#\n#---#\n#####"); 
+            this.LoadLevel("######\r\n#-.--#\r\n#-$.-#\r\n#-$--#\r\n#-@--#\r\n######");
+        }
 
         private FloorType this[Vector2 point] {
             get => this[point.X, point.Y];
@@ -156,41 +159,48 @@ namespace Sokoban.Model {
 
             this.width = (from line in lines select line.Length).Max();
             this.height = lines.Length;
-            this.map = new FloorType[this.height, this.width];
+            this.map = new FloorType[this.width, this.height];
 
             this.goals = new List<Vector2>();
             this.player = new Vector2(-1, -1);
             this.undoList = new Stack<List<Memo>>();
             this.currentGame = levelString;
             this.moveCount = 0;
-
-            for (int x = 0; x < this.height; x++) {
-                for (int y = 0; y < this.width; y++) {
+            var blockCount = 0;
+            for (int x = 0; x < this.width; x++) {
+                for (int y = 0; y < this.height; y++) {
                     try {
-                        this.map[x,y] = (FloorType) lines[x][y];
+                        this.map[x, y] = (FloorType) lines[y][x];
                         // detect player
-                        switch (this.map[x,y]) {
+                        switch (this.map[x, y]) {
                         case FloorType.Player:
                             if (this.player != new Vector2(-1, -1)) {
                                 throw new InvalidOperationException("too many players");
                             }
                             else {
-                                this.player = new Vector2(x,y);
+                                this.player = new Vector2(x, y);
                             }
                             break;
                         case FloorType.PlayerOnGoal:
-                            this.goals.Add(new Vector2(x,y));
+                            this.goals.Add(new Vector2(x, y));
                             goto case FloorType.Player;
                         case FloorType.Goal:
                         case FloorType.BlockOnGoal:
-                            this.goals.Add(new Vector2(x,y));
+                            this.goals.Add(new Vector2(x, y));
+                            blockCount++;
+                            break;
+                        case FloorType.Block:
+                            blockCount++;
                             break;
                         }
                     }
                     catch (IndexOutOfRangeException) {
-                        this.map[x,y] = FloorType.Empty;
+                        this.map[x, y] = FloorType.Empty;
                     }
                 }
+            }
+            if (this.goals.Count != blockCount) {
+                throw new ArgumentException("Goals and blocks don't equal");
             }
             this.view?.InitGame(this);
         }
@@ -276,6 +286,7 @@ namespace Sokoban.Model {
         }
 
         private void Update(params Vector2[] posList) {
+            if (this.view == null) return;
             foreach (Vector2 pos in posList) {
                 this.view.Update(pos.X, pos.Y, this[pos]);
             }
@@ -374,5 +385,7 @@ namespace Sokoban.Model {
             Move:
             return true;
         }
+
+        IEnumerator IEnumerable.GetEnumerator() { return this.map.GetEnumerator(); }
     }
 }

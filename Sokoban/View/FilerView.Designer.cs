@@ -25,10 +25,10 @@
         private void InitializeComponent() {
             this.label1 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.recentCommandLink = new Sokoban.View.CommandLink();
             this.cancelCommandLink = new Sokoban.View.CommandLink();
             this.dialogCommandLink = new Sokoban.View.CommandLink();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
             // label1
@@ -56,9 +56,11 @@
             this.recentCommandLink.TabIndex = 0;
             this.recentCommandLink.Text = "No recent file.";
             this.recentCommandLink.UseVisualStyleBackColor = true;
+            this.recentCommandLink.Click += new System.EventHandler(this.recentCommandLink_Click);
             // 
             // cancelCommandLink
             // 
+            this.cancelCommandLink.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelCommandLink.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cancelCommandLink.Location = new System.Drawing.Point(12, 169);
             this.cancelCommandLink.Name = "cancelCommandLink";
@@ -83,9 +85,11 @@
             // 
             // FilerView
             // 
+            this.AcceptButton = this.recentCommandLink;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
+            this.CancelButton = this.cancelCommandLink;
             this.ClientSize = new System.Drawing.Size(474, 241);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.recentCommandLink);

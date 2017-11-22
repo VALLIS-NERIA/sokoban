@@ -15,7 +15,8 @@ namespace Sokoban.Model {
         PlayerOnGoal = (int) '+'
     };
 
-    public interface IFileable {
+    // Not IEnumerable<T> since multi-dimension arrays don't implement gerenic version
+    public interface IFileable : System.Collections.IEnumerable {
         FloorType this[int x, int y] { get; }
         int Height { get; }
         int Width { get; }

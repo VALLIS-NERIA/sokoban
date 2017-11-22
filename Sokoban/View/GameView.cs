@@ -40,14 +40,14 @@ namespace Sokoban.View {
             this.moveCount = 0;
             this.panel1.Controls.Clear();
             this.floors = new FloorControl[game.Height, game.Width];
-            for (int x = 0; x < game.Height; x++) {
-                for (int y = 0; y < game.Width; y++) {
+            for (int y = 0; y < game.Height; y++) {
+                for (int x = 0; x < game.Width; x++) {
                     var floor = new FloorControl();
-                    this.floors[x, y] = floor;
-                    floor.Type = game[x, y];
+                    this.floors[x,y] = floor;
+                    floor.Type = game[x,y];
                     this.panel1.Controls.Add(floor);
                 }
-                this.panel1.SetFlowBreak(this.floors[x, game.Width - 1], true);
+                this.panel1.SetFlowBreak(this.floors[game.Width - 1,y], true);
             }
             if (this.Width > this.panel1.Width) {
                 this.panel1.Left = (this.Width - this.panel1.Width) / 4;
