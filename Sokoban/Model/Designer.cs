@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -141,5 +142,6 @@ namespace Sokoban.Model {
         }
 
         public void Save(string fileName) { this.filer.SaveFile(fileName, this); }
+        public IEnumerator GetEnumerator() { return this.map.GetEnumerator(); }
     }
 }

@@ -98,7 +98,7 @@ namespace Sokoban.Model {
 
         public FloorType this[int x, int y] {
             get {
-                if (x >= this.height || y >= this.width || x <= -1 || y <= -1) {
+                if (x >= this.width || y >= this.height || x <= -1 || y <= -1) {
                     return FloorType.Wall;
                 }
                 return this.map[x, y];
@@ -141,6 +141,7 @@ namespace Sokoban.Model {
         public int MoveCount => this.moveCount;
         public int PlayerX => this.player.X;
         public int PlayerY => this.player.Y;
+        public bool CheckBoxGoalEqual { get; set; } = false;
 
         public void Retry() { this.LoadLevel(this.currentGame); }
 
@@ -151,58 +152,91 @@ namespace Sokoban.Model {
             }
         }
 
-        public void SaveDialog() { this.filer.SaveDialog(this); }
+        public void LoadFile(string fileName) {
+            if (this.filer == null) return;
+            this.filer.LoadFile(fileName);
+            if (this.filer.LoadedFile != null) {
+                this.LoadLevel(this.filer.LoadedFile);
+            }
+        }
+
+        public void SaveDialog() {
+            if (this.filer == null) return;
+            this.filer.SaveDialog(this);
+        }
+
+        public void SaveToFile(string fileName) {
+            if (this.filer == null) return;
+            this.filer.SaveFile(fileName,this);
+        }
 
         public void LoadLevel(string levelString) {
-            // TODO: checker
             var lines = levelString.Trim().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            try {
+                this.width = (from line in lines select line.Length).Max();
+                this.height = lines.Length;
+                this.map = new FloorType[this.width, this.height];
 
-            this.width = (from line in lines select line.Length).Max();
-            this.height = lines.Length;
-            this.map = new FloorType[this.width, this.height];
-
-            this.goals = new List<Vector2>();
-            this.player = new Vector2(-1, -1);
-            this.undoList = new Stack<List<Memo>>();
-            this.currentGame = levelString;
-            this.moveCount = 0;
-            var blockCount = 0;
-            for (int x = 0; x < this.width; x++) {
-                for (int y = 0; y < this.height; y++) {
-                    try {
-                        this.map[x, y] = (FloorType) lines[y][x];
-                        // detect player
-                        switch (this.map[x, y]) {
-                        case FloorType.Player:
-                            if (this.player != new Vector2(-1, -1)) {
-                                throw new InvalidOperationException("too many players");
+                this.goals = new List<Vector2>();
+                this.player = new Vector2(-1, -1);
+                this.undoList = new Stack<List<Memo>>();
+                this.currentGame = levelString;
+                this.moveCount = 0;
+                var blockCount = 0;
+                for (int x = 0; x < this.width; x++) {
+                    for (int y = 0; y < this.height; y++) {
+                        try {
+                            this.map[x, y] = (FloorType) lines[y][x];
+                            // detect player
+                            switch (this.map[x, y]) {
+                            case FloorType.Player:
+                                if (this.player != new Vector2(-1, -1)) {
+                                    throw new InvalidOperationException("too many players");
+                                }
+                                else {
+                                    this.player = new Vector2(x, y);
+                                }
+                                break;
+                            case FloorType.PlayerOnGoal:
+                                this.goals.Add(new Vector2(x, y));
+                                goto case FloorType.Player;
+                            case FloorType.Goal:
+                                this.goals.Add(new Vector2(x, y));
+                                break;
+                            case FloorType.BlockOnGoal:
+                                this.goals.Add(new Vector2(x, y));
+                                blockCount++;
+                                break;
+                            case FloorType.Block:
+                                blockCount++;
+                                break;
                             }
-                            else {
-                                this.player = new Vector2(x, y);
-                            }
-                            break;
-                        case FloorType.PlayerOnGoal:
-                            this.goals.Add(new Vector2(x, y));
-                            goto case FloorType.Player;
-                        case FloorType.Goal:
-                        case FloorType.BlockOnGoal:
-                            this.goals.Add(new Vector2(x, y));
-                            blockCount++;
-                            break;
-                        case FloorType.Block:
-                            blockCount++;
-                            break;
+                        }
+                        catch (IndexOutOfRangeException) {
+                            this.map[x, y] = FloorType.Empty;
                         }
                     }
-                    catch (IndexOutOfRangeException) {
-                        this.map[x, y] = FloorType.Empty;
-                    }
                 }
+
+                if (this.goals.Count != blockCount&& this.CheckBoxGoalEqual) {
+                    throw new ArgumentException($"Goals({this.goals.Count}) and blocks({blockCount}) don't equal");
+                }
+                this.view?.InitGame(this);
             }
-            if (this.goals.Count != blockCount) {
-                throw new ArgumentException("Goals and blocks don't equal");
+            // reset everything
+            catch {
+                this.width = (from line in lines select line.Length).Max();
+                this.height = lines.Length;
+                this.map = new FloorType[this.width, this.height];
+
+                this.goals = new List<Vector2>();
+                this.player = new Vector2(-1, -1);
+                this.undoList = new Stack<List<Memo>>();
+                this.currentGame = levelString;
+                this.moveCount = 0;
+                this.view?.InitGame(this);
+                throw;
             }
-            this.view?.InitGame(this);
         }
 
         public void SetView(IGameView view) {
@@ -288,7 +322,9 @@ namespace Sokoban.Model {
         private void Update(params Vector2[] posList) {
             if (this.view == null) return;
             foreach (Vector2 pos in posList) {
-                this.view.Update(pos.X, pos.Y, this[pos]);
+                if (pos.X < this.width && pos.X >= 0 && pos.Y < this.height && pos.Y >= 0) {
+                    this.view.Update(pos.X, pos.Y, this[pos]);
+                }
             }
             if (IsWin()) {
                 this.view.Congraz();
@@ -386,6 +422,6 @@ namespace Sokoban.Model {
             return true;
         }
 
-        IEnumerator IEnumerable.GetEnumerator() { return this.map.GetEnumerator(); }
+        public IEnumerator GetEnumerator() { return this.map.GetEnumerator(); }
     }
 }
