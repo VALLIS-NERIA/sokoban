@@ -36,8 +36,8 @@ namespace Sokoban.View.WPF {
             this.floors = new FloorControl[game.Height, game.Width];
 
             FloorControl initPlayer = null;
-            for (int x = 0; x < game.Height; x++) {
-                for (int y = 0; y < game.Width; y++) {
+            for (int y = 0; y < game.Height; y++) {
+                for (int x = 0; x < game.Width; x++) {
                     var floor = new FloorControl();
                     this.floors[x, y] = floor;
                     floor.Type = game[x, y];
@@ -52,7 +52,6 @@ namespace Sokoban.View.WPF {
             var up = this.controller.CanMove(Direction.Up);
             var down = this.controller.CanMove(Direction.Down);
             initPlayer?.SetDirection(up, down, left, right);
-
         }
 
         public void Congraz() { MessageBox.Show("You Win!"); }
@@ -61,7 +60,7 @@ namespace Sokoban.View.WPF {
 
         public void Update(int x, int y, FloorType type) {
             this.floors[x, y].Type = type;
-            this.floors[x,y].ClearDirection();
+            this.floors[x, y].ClearDirection();
             if (type == FloorType.Player || type == FloorType.PlayerOnGoal) {
                 var left = this.controller.CanMove(Direction.Left);
                 var right = this.controller.CanMove(Direction.Right);
@@ -118,9 +117,7 @@ namespace Sokoban.View.WPF {
         private void loadButton_Click(object sender, RoutedEventArgs e) { this.controller.Load(); }
 
         private void saveButton_Click(object sender, RoutedEventArgs e) { this.controller.Save(); }
-       
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e) {
-            Move(e);
-        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e) { Move(e); }
     }
 }

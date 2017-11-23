@@ -43,11 +43,11 @@ namespace Sokoban.View {
             for (int y = 0; y < game.Height; y++) {
                 for (int x = 0; x < game.Width; x++) {
                     var floor = new FloorControl();
-                    this.floors[x,y] = floor;
-                    floor.Type = game[x,y];
+                    this.floors[x, y] = floor;
+                    floor.Type = game[x, y];
                     this.panel1.Controls.Add(floor);
                 }
-                this.panel1.SetFlowBreak(this.floors[game.Width - 1,y], true);
+                this.panel1.SetFlowBreak(this.floors[game.Width - 1, y], true);
             }
             if (this.Width > this.panel1.Width) {
                 this.panel1.Left = (this.Width - this.panel1.Width) / 4;
@@ -67,7 +67,7 @@ namespace Sokoban.View {
         public void Update(int x, int y, FloorType type) {
             this.floors[x, y].Type = type;
             this.floors[x, y].RefreshImage();
-            if (type == FloorType.Player || type== FloorType.PlayerOnGoal) {
+            if (type == FloorType.Player || type == FloorType.PlayerOnGoal) {
                 // TODO
             }
         }
@@ -131,6 +131,6 @@ namespace Sokoban.View {
 
         private void saveButton_Click(object sender, EventArgs e) { this.controller.Save(); }
 
-        private void GameView_Resize(object sender, EventArgs e) {  }
+        private void GameView_Resize(object sender, EventArgs e) { }
     }
 }

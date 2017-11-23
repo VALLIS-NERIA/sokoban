@@ -138,7 +138,7 @@ namespace Sokoban.Model {
                     break;
                 }
             }
-            return goal == block && player <= 1;
+            return goal == block && player == 1;
         }
 
         public void Save(string fileName) { this.filer.SaveFile(fileName, this); }
