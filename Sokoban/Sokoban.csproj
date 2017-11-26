@@ -50,6 +50,19 @@
     <Compile Include="Controller\DesignerController.cs" />
     <Compile Include="Controller\FilerController.cs" />
     <Compile Include="Controller\IDesignerController.cs" />
+    <Compile Include="Other2\ModifiedGameController.cs" />
+    <Compile Include="Other2\ModifiedIGameController.cs" />
+    <Compile Include="Other2\ModifiedGame.cs" />
+    <Compile Include="Other2\OtherPersonsIGame.cs" />
+    <Compile Include="Other\ModifiedGame.cs" />
+    <Compile Include="Other\ModifiedGameView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Other\ModifiedGameView.designer.cs">
+      <DependentUpon>ModifiedGameView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Other\ModifiedIGame.cs" />
+    <Compile Include="Other\OtherPersonsIGameVIew.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -116,6 +129,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Other\ModifiedGameView.resx">
+      <DependentUpon>ModifiedGameView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

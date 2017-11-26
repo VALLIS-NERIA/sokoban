@@ -84,7 +84,7 @@ namespace Sokoban.Model {
                 if (value == FloorType.Player) {
                     foreach (FloorType type in this.map) {
                         if (type == FloorType.Player) {
-                            throw new InvalidOperationException();
+                            throw new InvalidOperationException("There are too many players!");
                         }
                     }
                 }

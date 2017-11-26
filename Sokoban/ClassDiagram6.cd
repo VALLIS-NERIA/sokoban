@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Sokoban.Model.GameModel">
+    <Position X="10.75" Y="1.5" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="Sokoban.Model.GameModel.Vector2" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Game.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="Sokoban.Model.GameModel.Memo" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Game.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>IAwAECkgBIAADBRASIAAAECEAQAYAAARAQigACAABAA=</HashCode>
+      <FileName>Model\Game.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Sokoban.View.GameView" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Protected" Collapsed="true" />
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ICQAAAAABKAApAFAAACIQACCEAAIAAQIAAAAQwQAQCA=</HashCode>
+      <FileName>View\GameView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.122" />
+  </Class>
+  <Class Name="Sokoban.View.WPF.WPFGameView" BaseTypeListCollapsed="true">
+    <Position X="15.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ICQAAAAAAIAAJAFAAIAIQACAEAAAAAAAAAAAQgAAACA=</HashCode>
+      <FileName>View\WPF\GameView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="Sokoban.View.IGameView">
+    <Position X="4.5" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>ACQAAAAAAAAAAAAAAAAAQAAAEAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>View\IGameView.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Sokoban.Model.IGame">
+    <Position X="1" Y="2.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAACggAIAADABAAIAAAACEAQAQAAAQAAgAACAABAA=</HashCode>
+      <FileName>Model\IGame.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Sokoban.Model.IFileable">
+    <Position X="1" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAACAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\IFileable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Sokoban.Controller.IGameController">
+    <Position X="4.5" Y="3" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>kAAAgKAAAIAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controller\IGameController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>
