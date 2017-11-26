@@ -431,6 +431,7 @@ namespace UnitTest {
             game.SetView(view);
             try {
                 view.Show();
+                view.Close();
             }
             catch {
                 Assert.Fail();
@@ -444,7 +445,7 @@ namespace UnitTest {
             game.CheckBoxGoalEqual = false; // suppress expection
             game.LoadLevel(level);
             var expected = true;
-            var filer=new Filer();
+            var filer = new Filer();
             game.SetFiler(filer);
             game.SaveToFile("test.txt");
             Assert.AreEqual(File.ReadAllText("test.txt").Trim(), "-----\n-----\n--@--\n-----\n-----".Replace("\n", Environment.NewLine));
@@ -460,7 +461,86 @@ namespace UnitTest {
             game.SetFiler(filer);
             game.LoadFile("test.txt");
             var actual = game.PlayerY;
-            Assert.AreEqual(expected,actual);
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
+        #region Designer
+
+        [TestMethod]
+        public void Designer_Default() {
+            var designer = new DesignerModel();
+            designer.CreateLevel(6, 6);
+            var expected = FloorType.Empty;
+            var actual = designer[2, 0];
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Designer_Put() {
+            var designer = new DesignerModel();
+            designer.CreateLevel(6, 6);
+            var expected = FloorType.Wall;
+            designer[2, 0] = FloorType.Wall;
+            var actual = designer[2, 0];
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Designer_PutOnGoal() {
+            var designer = new DesignerModel();
+            designer.CreateLevel(6, 6);
+            var expected = FloorType.BlockOnGoal;
+            designer[2, 0] = FloorType.Goal;
+            designer[2, 0] = FloorType.Block;
+            var actual = designer[2, 0];
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Designer_Check() {
+            var designer = new DesignerModel();
+            designer.CreateLevel(6, 6);
+            var expected = false;
+            designer[2, 0] = FloorType.Goal;
+            designer[2, 0] = FloorType.Block;
+            designer[3, 0] = FloorType.Block;
+            var actual = designer.CheckValid();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Designer_Check2() {
+            void myDo (){
+                var designer = new DesignerModel();
+                designer.CreateLevel(6, 6);
+                designer[2, 0] = FloorType.Player;
+                designer[3, 0] = FloorType.Player;
+            }
+
+            Assert.ThrowsException<InvalidOperationException>((Action) myDo);
+        }
+
+        [TestMethod]
+        public void Designer_Save() {
+            var designer = new DesignerModel();
+            var filer = new Filer();
+            designer.SetFiler(filer);
+            designer.CreateLevel(5, 5);
+            var expected = false;
+            designer[2, 2] = FloorType.Player;
+            designer.Save("designertest.txt");
+            Assert.AreEqual(File.ReadAllText("designertest.txt").Trim(), "-----\n-----\n--@--\n-----\n-----".Replace("\n", Environment.NewLine));
+        }
+
+        public void Designer_Load() {
+            var designer = new DesignerModel();
+            designer.CreateLevel(5, 5);
+            var expected = FloorType.Player;
+            designer.LoadLevel(File.ReadAllText("designertest.txt"));
+            var actual = designer[2, 2];
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion

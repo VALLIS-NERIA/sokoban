@@ -19,17 +19,42 @@ namespace Play {
             var gameView = new GameView();
             var gameModel = new GameModel();
             var gameController = new GameController();
-            var filerView = new FilerView();
-            var filerModel = new Filer();
-            var filerController = new FilerController();
             gameController.SetGame(gameModel);
             gameView.SetController(gameController);
             gameModel.SetView(gameView);
+
+            var filerView = new FilerView();
+            var filerModel = new Filer();
+            var filerController = new FilerController();
             filerView.SetController(filerController);
             filerController.SetFiler(filerModel);
             filerModel.SetView(filerView);
+
             gameModel.SetFiler(filerModel);
-            Application.Run(gameView);
+
+
+            //Other person's IGameView
+            //Modified GameModel and GameView
+            //Original GameController
+            var gameModel1 = new Sokoban.Other.ModifiedGameModel();
+            var gameController1 = new GameController();
+            var gameView1 = new Sokoban.Other.ModifiedGameView(gameController1, gameModel1);
+            gameController1.SetGame(gameModel1);
+            gameModel1.SetView(gameView1);
+
+
+            //Other person's IGameController
+            //Modified GameController and GameModel
+            //Original GameView
+            var gameView2 =new GameView();
+            var gameModel2=new Sokoban.Other2.ModifiedGameModel(gameView2);
+            var gameController2=new Sokoban.Other2.ModifiedGameController(filerModel);
+            gameView2.SetController(gameController2);
+            gameController2.SetGame(gameModel2);
+
+            //Application.Run(gameView);
+            //Application.Run(gameView1);
+            Application.Run(gameView2);
         }
     }
 }
