@@ -59,8 +59,14 @@ namespace Sokoban.View {
         private void FloorControl_Enter(object sender, EventArgs e) { }
 
         private void DesignFloorControl_Click(object sender, EventArgs e) {
-            if (this.View.SelectedType != null) {
-                this.View.Set(this.X, this.Y, (FloorType) this.View.SelectedType);
+            if (((MouseEventArgs) e).Button == MouseButtons.Right) {
+                this.View.Set(this.X, this.Y, (FloorType) this.View.SelectedType2);
+
+            }
+            else {
+                if (this.View.SelectedType != null) {
+                    this.View.Set(this.X, this.Y, (FloorType) this.View.SelectedType);
+                }
             }
         }
     }

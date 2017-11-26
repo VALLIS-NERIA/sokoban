@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,10 +20,17 @@ namespace Sokoban.View {
         private int height;
         private NewMapDialog newMapDialog = new NewMapDialog();
 
-        public DesignerView() { InitializeComponent(); }
+        public DesignerView() {
+            InitializeComponent();
+            this.buttons = new List<Button> {this.buttonEmpty, this.buttonBlock, this.buttonGoal, this.buttonPlayer, this.buttonWall};
+        }
 
         private FloorType? selectedType;
+        private FloorType? selectedType2;
         public FloorType? SelectedType => this.selectedType;
+        public FloorType? SelectedType2 => this.selectedType2;
+        private List<Button> buttons;
+        private Dictionary<MouseButtons, Button> selectedButtons = new Dictionary<MouseButtons, Button>();
 
         public void InitDesigner(IFileable map) {
             this.panel1.Controls.Clear();
@@ -39,6 +47,8 @@ namespace Sokoban.View {
                     this.floors[x, y].RefreshImage();
                 }
             }
+            if (this.panel2.Width < this.Width - 6)
+                this.panel2.Left = (this.Width - this.panel2.Width) / 2 - 4;
         }
 
         private void CreateNewLevel(int width, int height) { this.controller.CreateNewLevel(width, height); }
@@ -72,49 +82,69 @@ namespace Sokoban.View {
             }
         }
 
-        private void buttonEmpty_Click(object sender, EventArgs e) {
-            this.selectedType = FloorType.Empty;
-            this.buttonEmpty.Image = Resources.check;
-            this.buttonBlock.Image = null;
-            this.buttonGoal.Image = null;
-            this.buttonPlayer.Image = null;
-            this.buttonWall.Image = null;
+
+        private void SetButtons(Button button, MouseEventArgs e) {
+            MouseButtons mouseButton = e.Button;
+            var img = (mouseButton == MouseButtons.Right) ? Resources.check2 : Resources.check;
+            foreach (Button b in this.buttons) {
+                if (this.selectedButtons.ContainsKey(mouseButton)) {
+                    if (b == this.selectedButtons[mouseButton]) {
+                        b.Image = null;
+                    }
+                }
+            }
+            this.selectedButtons[mouseButton] = button;
+            button.Image = img;
         }
 
-        private void buttonWall_Click(object sender, EventArgs e) {
-            this.selectedType = FloorType.Wall;
-            this.buttonEmpty.Image = null;
-            this.buttonBlock.Image = null;
-            this.buttonGoal.Image = null;
-            this.buttonPlayer.Image = null;
-            this.buttonWall.Image = Resources.check;
+        private void buttonEmpty_Click(object sender, MouseEventArgs e) {
+            if (((MouseEventArgs) e).Button == MouseButtons.Right) {
+                this.selectedType2 = FloorType.Empty;
+            }
+            else {
+                this.selectedType = FloorType.Empty;
+            }
+            SetButtons(this.buttonEmpty, e);
         }
 
-        private void buttonGoal_Click(object sender, EventArgs e) {
-            this.selectedType = FloorType.Goal;
-            this.buttonEmpty.Image = null;
-            this.buttonBlock.Image = null;
-            this.buttonGoal.Image = Resources.check;
-            this.buttonPlayer.Image = null;
-            this.buttonWall.Image = null;
+        private void buttonWall_Click(object sender, MouseEventArgs e) {
+            if (((MouseEventArgs) e).Button == MouseButtons.Right) {
+                this.selectedType2 = FloorType.Wall;
+            }
+            else {
+                this.selectedType = FloorType.Wall;
+            }
+            SetButtons(this.buttonWall, e);
         }
 
-        private void buttonBlock_Click(object sender, EventArgs e) {
-            this.selectedType = FloorType.Block;
-            this.buttonEmpty.Image = null;
-            this.buttonBlock.Image = Resources.check;
-            this.buttonGoal.Image = null;
-            this.buttonPlayer.Image = null;
-            this.buttonWall.Image = null;
+        private void buttonGoal_Click(object sender, MouseEventArgs e) {
+            if (((MouseEventArgs) e).Button == MouseButtons.Right) {
+                this.selectedType2 = FloorType.Goal;
+            }
+            else {
+                this.selectedType = FloorType.Goal;
+            }
+            SetButtons(this.buttonGoal, e);
         }
 
-        private void buttonPlayer_Click(object sender, EventArgs e) {
-            this.selectedType = FloorType.Player;
-            this.buttonEmpty.Image = null;
-            this.buttonBlock.Image = null;
-            this.buttonGoal.Image = null;
-            this.buttonPlayer.Image = Resources.check;
-            this.buttonWall.Image = null;
+        private void buttonBlock_Click(object sender, MouseEventArgs e) {
+            if (((MouseEventArgs) e).Button == MouseButtons.Right) {
+                this.selectedType2 = FloorType.Block;
+            }
+            else {
+                this.selectedType = FloorType.Block;
+            }
+            SetButtons(this.buttonBlock, e);
+        }
+
+        private void buttonPlayer_Click(object sender, MouseEventArgs e) {
+            if (((MouseEventArgs) e).Button == MouseButtons.Right) {
+                this.selectedType2 = FloorType.Player;
+            }
+            else {
+                this.selectedType = FloorType.Player;
+            }
+            SetButtons(this.buttonPlayer, e);
         }
 
         private void menuNew_Click(object sender, EventArgs e) {
@@ -138,6 +168,10 @@ namespace Sokoban.View {
             else {
                 this.controller.Save();
             }
+        }
+
+        private void DesignerView_Resize(object sender, EventArgs e) {
+
         }
     }
 }

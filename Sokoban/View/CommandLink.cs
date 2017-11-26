@@ -66,29 +66,21 @@ namespace Sokoban.View {
         static extern int SendMessage(HandleRef hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
 
         private void SetNoteText(string value) {
-            SendMessage(new HandleRef(this, this.Handle),
-                        BCM_SETNOTE,
-                        IntPtr.Zero, value);
+            SendMessage(new HandleRef(this, this.Handle), BCM_SETNOTE, IntPtr.Zero, value);
             this.note = value;
+        }
+
+        private string GetNoteText() {
+            int length = SendMessage(new HandleRef(this, this.Handle), BCM_GETNOTELENGTH, IntPtr.Zero, IntPtr.Zero) + 1;
+            StringBuilder sb = new StringBuilder(length);
+            SendMessage(new HandleRef(this, this.Handle), BCM_GETNOTE, ref length, sb);
+            this.note = sb.ToString();
+            return sb.ToString();
         }
 
         public override void Refresh() {
             SetNoteText(note);
             base.Refresh();
-        }
-
-        private string GetNoteText() {
-            int length = SendMessage(new HandleRef(this, this.Handle),
-                                     BCM_GETNOTELENGTH,
-                                     IntPtr.Zero, IntPtr.Zero) + 1;
-
-            StringBuilder sb = new StringBuilder(length);
-
-            SendMessage(new HandleRef(this, this.Handle),
-                        BCM_GETNOTE,
-                        ref length, sb);
-            this.note = sb.ToString();
-            return sb.ToString();
         }
     }
 }

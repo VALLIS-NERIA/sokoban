@@ -9,6 +9,7 @@ using Sokoban.Model;
 namespace Sokoban.View {
     public interface IDesignerView {
         FloorType? SelectedType { get; }
+        FloorType? SelectedType2 { get; }
         void InitDesigner(IFileable map);
         void Update(int x, int y, FloorType type);
         void SetController(IDesignerController controller);
