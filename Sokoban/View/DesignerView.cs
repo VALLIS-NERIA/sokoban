@@ -27,8 +27,14 @@ namespace Sokoban.View {
 
         private FloorType? selectedType;
         private FloorType? selectedType2;
-        public FloorType? SelectedType => this.selectedType;
-        public FloorType? SelectedType2 => this.selectedType2;
+        public FloorType? SelectedType {
+            get { return this.selectedType; }
+        }
+
+        public FloorType? SelectedType2 {
+            get { return this.selectedType2; }
+        }
+
         private List<Button> buttons;
         private Dictionary<MouseButtons, Button> selectedButtons = new Dictionary<MouseButtons, Button>();
 

@@ -21,7 +21,9 @@ namespace Sokoban.View {
 
         public CommandLink() { this.FlatStyle = FlatStyle.System; }
 
-        protected override System.Drawing.Size DefaultSize => new Size(180, 60);
+        protected override System.Drawing.Size DefaultSize {
+            get { return new Size(180, 60); }
+        }
 
         protected override CreateParams CreateParams {
             get {
@@ -35,7 +37,7 @@ namespace Sokoban.View {
          Description("Gets or sets the shield icon visibility of the command link."),
          DefaultValue(false)]
         public bool Shield {
-            get => this._shield;
+            get { return this._shield; }
             set {
                 this._shield = value;
                 SendMessage(new HandleRef(this, this.Handle), BCM_SETSHIELD, IntPtr.Zero,
@@ -47,8 +49,8 @@ namespace Sokoban.View {
          Description("Gets or sets the note text of the command link."),
          DefaultValue("")]
         public string Note {
-            get => GetNoteText();
-            set => SetNoteText(value);
+            get { return GetNoteText(); }
+            set { SetNoteText(value); }
         }
 
         private string note;

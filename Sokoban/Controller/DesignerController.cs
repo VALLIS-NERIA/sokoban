@@ -21,6 +21,6 @@ namespace Sokoban.Controller {
 
         public void SetModel(IDesigner designer) { this.model = designer; }
 
-        public bool CheckValid() => this.model.CheckValid();
+        public bool CheckValid() { return this.model.CheckValid(); }
     }
 }

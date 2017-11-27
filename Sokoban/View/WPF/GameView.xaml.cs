@@ -15,7 +15,7 @@ namespace Sokoban.View.WPF {
         private int _moveCount = 0;
 
         private int moveCount {
-            get => this._moveCount;
+            get { return this._moveCount; }
             set {
                 this._moveCount = value;
                 this.stepTextBox.Text = this.moveCount.ToString();
@@ -51,7 +51,9 @@ namespace Sokoban.View.WPF {
             var right = this.controller.CanMove(Direction.Right);
             var up = this.controller.CanMove(Direction.Up);
             var down = this.controller.CanMove(Direction.Down);
-            initPlayer?.SetDirection(up, down, left, right);
+            if (initPlayer != null) {
+                initPlayer.SetDirection(up, down, left, right);
+            }
         }
 
         public void Congraz() { MessageBox.Show("You Win!"); }

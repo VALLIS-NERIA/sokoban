@@ -11,7 +11,9 @@ namespace Sokoban.Model {
     public class Filer : IFiler {
         private IFilerView view;
         private string loadedFile;
-        public string LoadedFile => this.loadedFile;
+        public string LoadedFile {
+            get { return this.loadedFile; }
+        }
 
         public string Serialize(IFileable fileable) {
             var sb = new StringBuilder();

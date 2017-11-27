@@ -87,13 +87,14 @@ namespace Sokoban.Model {
         private IGameView view;
 
         public GameModel() {
+            this.CheckBoxGoalEqual = false;
             //this.LoadLevel("#####\n#---#\n#-@-#\n#---#\n#####"); 
             this.LoadLevel("######\r\n#-.--#\r\n#-$.-#\r\n#-$--#\r\n#-@--#\r\n######");
         }
 
         private FloorType this[Vector2 point] {
-            get => this[point.X, point.Y];
-            set => this[point.X, point.Y] = value;
+            get { return this[point.X, point.Y]; }
+            set { this[point.X, point.Y] = value; }
         }
 
         public FloorType this[int x, int y] {
@@ -136,12 +137,27 @@ namespace Sokoban.Model {
             }
         }
 
-        public int Width => this.width;
-        public int Height => this.height;
-        public int MoveCount => this.moveCount;
-        public int PlayerX => this.player.X;
-        public int PlayerY => this.player.Y;
-        public bool CheckBoxGoalEqual { get; set; } = false;
+        public int Width {
+            get { return this.width; }
+        }
+
+        public int Height {
+            get { return this.height; }
+        }
+
+        public int MoveCount {
+            get { return this.moveCount; }
+        }
+
+        public int PlayerX {
+            get { return this.player.X; }
+        }
+
+        public int PlayerY {
+            get { return this.player.Y; }
+        }
+
+        public bool CheckBoxGoalEqual { get; set; }
 
         public void Retry() { this.LoadLevel(this.currentGame); }
 
@@ -219,9 +235,11 @@ namespace Sokoban.Model {
                 }
 
                 if (this.goals.Count != blockCount&& this.CheckBoxGoalEqual) {
-                    throw new ArgumentException($"Goals({this.goals.Count}) and blocks({blockCount}) don't equal");
+                    throw new ArgumentException(string.Format("Goals({0}) and blocks({1}) don't equal", this.goals.Count, blockCount));
                 }
-                this.view?.InitGame(this);
+                if (view != null) {
+                    this.view.InitGame(this);
+                }
             }
             // reset everything
             catch {
@@ -234,7 +252,9 @@ namespace Sokoban.Model {
                 this.undoList = new Stack<List<Memo>>();
                 this.currentGame = levelString;
                 this.moveCount = 0;
-                this.view?.InitGame(this);
+                if (view != null) {
+                    this.view.InitGame(this);
+                }
                 throw;
             }
         }

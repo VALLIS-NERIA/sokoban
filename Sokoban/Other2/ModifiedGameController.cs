@@ -19,9 +19,9 @@ namespace Sokoban.Other2 {
             return count1 != count0;
         }
 
-        public bool CanMove(Direction direction) => true;// It doesn't matter since the WinForm GameView don't use this method.
+        public bool CanMove(Direction direction) { return true; }
 
-        public void Restart() => this.game.Restart();
+        public void Restart() { this.game.Restart(); }
 
         public void Load() {
             var result = this.filer.LoadDialog();

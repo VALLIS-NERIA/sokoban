@@ -19,7 +19,7 @@ namespace Sokoban.View {
         private int _moveCount = 0;
 
         private int moveCount {
-            get => this._moveCount;
+            get { return this._moveCount; }
             set {
                 this._moveCount = value;
                 this.stepTextBox.Text = this.moveCount.ToString();
@@ -30,7 +30,7 @@ namespace Sokoban.View {
 
         public GameView(IGameController controller) : this() { SetController(controller); }
 
-        protected override bool ProcessDialogKey(Keys keyData) => false;
+        protected override bool ProcessDialogKey(Keys keyData) { return false; }
 
         public void Congraz() { MessageBox.Show("You Win!"); }
 

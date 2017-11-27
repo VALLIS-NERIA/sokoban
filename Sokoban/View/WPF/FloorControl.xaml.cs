@@ -28,7 +28,7 @@ namespace Sokoban.View.WPF {
         private FloorType type;
 
         public FloorType Type {
-            get => this.type;
+            get { return this.type; }
             set {
                 this.type = value;
                 RefreshImage();

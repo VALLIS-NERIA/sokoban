@@ -512,14 +512,13 @@ namespace UnitTest {
 
         [TestMethod]
         public void Designer_Check2() {
-            void myDo (){
-                var designer = new DesignerModel();
-                designer.CreateLevel(6, 6);
-                designer[2, 0] = FloorType.Player;
-                designer[3, 0] = FloorType.Player;
-            }
-
-            Assert.ThrowsException<InvalidOperationException>((Action) myDo);
+            Assert.ThrowsException<InvalidOperationException>(
+                () => {
+                    var designer = new DesignerModel();
+                    designer.CreateLevel(6, 6);
+                    designer[2, 0] = FloorType.Player;
+                    designer[3, 0] = FloorType.Player;
+                });
         }
 
         [TestMethod]

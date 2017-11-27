@@ -20,8 +20,13 @@ namespace Sokoban.Model {
 
         public DesignerModel() { }
 
-        public int Width => this.width;
-        public int Height => this.height;
+        public int Width {
+            get { return this.width; }
+        }
+
+        public int Height {
+            get { return this.height; }
+        }
 
         public void CreateLevel(int width, int height) {
             this.map = new FloorType[width, height];
@@ -32,7 +37,9 @@ namespace Sokoban.Model {
                     this.map[i, j] = FloorType.Empty;
                 }
             }
-            this.view?.InitDesigner(this);
+            if (view != null) {
+                this.view.InitDesigner(this);
+            }
         }
 
         public void LoadDialog() {
@@ -61,7 +68,9 @@ namespace Sokoban.Model {
                     }
                 }
             }
-            this.view?.InitDesigner(this);
+            if (this.view != null) {
+                this.view.InitDesigner(this);
+            }
         }
 
         public void SetView(IDesignerView view) { this.view = view; }
@@ -79,7 +88,7 @@ namespace Sokoban.Model {
 
 
         public FloorType this[int x, int y] {
-            get => this.map[x, y];
+            get { return this.map[x, y]; }
             set {
                 if (value == FloorType.Player) {
                     foreach (FloorType type in this.map) {
@@ -109,7 +118,9 @@ namespace Sokoban.Model {
                     break;
                 }
                 ret:
-                this.view?.Update(x, y, this.map[x, y]);
+                if (this.view != null) {
+                    this.view.Update(x, y, this.map[x, y]);
+                }
             }
         }
 

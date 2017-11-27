@@ -15,15 +15,27 @@ namespace Sokoban.View {
         public DesignFloorControl() { InitializeComponent(); }
 
         public DesignFloorControl(int x, int y, IDesignerView view) : this() {
-            this.X = x;
-            this.Y = y;
-            this.View = view;
+            this.x = x;
+            this.y = y;
+            this.view = view;
         }
 
-        public IDesignerView View { get; }
+        public IDesignerView View {
+            get { return this.view; }
+        }
+
         public FloorType Type;
-        public int X { get; }
-        public int Y { get; }
+        private readonly int x;
+        private readonly int y;
+        private readonly IDesignerView view;
+
+        public int X {
+            get { return this.x; }
+        }
+
+        public int Y {
+            get { return this.y; }
+        }
 
         public void RefreshImage() {
             string resourceName = "";

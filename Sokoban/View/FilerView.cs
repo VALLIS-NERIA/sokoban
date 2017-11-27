@@ -27,7 +27,7 @@ namespace Sokoban.View {
         private string _recentFile = null;
 
         private string recentFile {
-            get => this._recentFile;
+            get { return this._recentFile; }
             set {
                 this._recentFile = value;
                 this.recentCommandLink.Enabled = true;
@@ -36,10 +36,12 @@ namespace Sokoban.View {
             }
         }
 
-        public string LoadedFile => this.loadedFile;
+        public string LoadedFile {
+            get { return this.loadedFile; }
+        }
 
         public string RecentFile {
-            get => this.recentFile;
+            get { return this.recentFile; }
         }
 
         public void SetController(IFilerController controller) { this.controller = controller; }
