@@ -534,6 +534,7 @@ namespace UnitTest {
             Assert.AreEqual(File.ReadAllText("designertest.txt").Trim(), "-----\n-----\n--@--\n-----\n-----".Replace("\n", Environment.NewLine));
         }
 
+        [TestMethod]
         public void Designer_Load() {
             var designer = new DesignerModel();
             designer.CreateLevel(5, 5);

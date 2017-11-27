@@ -67,12 +67,12 @@ namespace Sokoban.Model {
         public void SetView(IDesignerView view) { this.view = view; }
 
         public void Save() {
-            if (this.myFileName != null) {
-                this.filer.SaveFile(this.myFileName, this);
-            }
-            else {
+            //if (this.myFileName != null) {
+            //    this.filer.SaveFile(this.myFileName, this);
+            //}
+            //else {
                 SaveDialog();
-            }
+            //}
         }
 
         public void SaveDialog() { this.filer.SaveDialog(this); }

@@ -33,7 +33,7 @@ namespace Sokoban.View.WPF {
             this.moveCount = 0;
             this.panel1.Children.Clear();
             this.panel1.Width = game.Width * new FloorControl().Width;
-            this.floors = new FloorControl[game.Height, game.Width];
+            this.floors = new FloorControl[game.Width, game.Height];
 
             FloorControl initPlayer = null;
             for (int y = 0; y < game.Height; y++) {
